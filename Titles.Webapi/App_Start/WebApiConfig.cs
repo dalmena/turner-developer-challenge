@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.Net.Http.Formatting;
+using System.Web.Http.Cors;
 
 namespace Titles.Webapi
 {
@@ -14,7 +15,12 @@ namespace Titles.Webapi
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-
+            // Web API routes
+            var options = new EnableCorsAttribute("*", "*", "*", "sessionexpire");
+            options.SupportsCredentials = true;
+            options.PreflightMaxAge = Int64.MaxValue;
+            config.EnableCors(options);
+          
             // Web API routes
             config.MapHttpAttributeRoutes();
 
