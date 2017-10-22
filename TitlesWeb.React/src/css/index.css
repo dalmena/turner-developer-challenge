@@ -5,3 +5,7 @@
 header {
     height: 40px;
 }
+
+.clickable {
+    cursor: pointer;
+}

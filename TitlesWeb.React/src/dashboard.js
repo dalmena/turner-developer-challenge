@@ -2,6 +2,16 @@ import React from 'react';
 import { TitlesList } from './titles-list';
 
 export class Dashboard extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      searchText: "",
+      searchApplied: ""
+    }
+  }
+
   render() {
     return (
       <div>
@@ -24,16 +34,28 @@ export class Dashboard extends React.Component {
                 </li>
               </ul>
               <form className="form-inline mt-2 mt-md-0">
-                <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" onChange={this.updateSearch.bind(this)} />
+                <button className="btn btn-outline-success my-2 my-sm-0" onClick={() => this.applySearch()}>Search</button>
               </form>
             </div>
           </nav>
         </header>
         <main role="main" className="container">
-          <TitlesList />
+          <TitlesList ref="list" search={this.state.searchApplied} />
         </main>
       </div>
     );
   }
+
+  updateSearch(event) {
+    this.setState({ searchText: event.target.value }, () => {
+      if (this.state.searchText === "")
+        this.applySearch();
+    })
+  }
+
+  applySearch() {
+    this.refs.list.loadData(this.state.searchText);
+  }
+
 }

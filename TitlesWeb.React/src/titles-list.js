@@ -9,52 +9,61 @@ export class TitlesList extends React.Component {
         }
     }
 
-    componentDidMount() {
+    // shouldComponentUpdate = (nextProps, nextState) => this.props.search === "" || this.props.search !== nextProps.search;
 
-        console.log('teste');
-        fetch('http://localhost:63039/titles')
+    loadData(search) {
+        //console.log("search", this.props.search);
+        fetch('http://localhost:63039/titles?search=' + escape(search))
             .then(results => {
-                console.log("results", results);
-
                 return results.json();
-            }
-            )
-            .then(
-            data => {
-                console.log(data);
+            })
+            .then(data => {
                 let titles = data.map(title => {
-                    console.log("title", title);
                     return (
-                        <tr>
+                        <tr key={title.TitleId} className="clickable" onClick={ () => this.loadDetail(title.TitleId) }>
                             <td>{title.TitleId}</td>
                             <td>{title.TitleName}</td>
-                            <td>ipsum</td>
-                            <td>dolor</td>
-                            <td>sit</td>
+                            <td>{title.ReleaseYear}</td>
                         </tr>
                     )
                 })
-
-                this.setState({ titles: titles });
+                if (titles.length === 0) this.setNoDataFound();
+                else this.setState({ titles: titles });
             },
-            (err) => console.log("error: ", err)
+                (err) => {
+                    console.log("error: ", err)
+                    this.setNoDataFound()    
+                }   
             );
+    }
 
+    loadDetail(titleId) {
+        console.log("titleId", titleId)
+    }
+
+    componentDidMount() {
+        this.loadData("");
+    }
+
+    setNoDataFound() {
+        this.setState({ titles: (
+            <tr>
+                <td colSpan="3">No data found.</td>
+            </tr>
+        )});
     }
 
     render() {
         return (
             <div>
-                <h2>Titles List</h2>
+                <h3>Movies list</h3>
                 <div className="table-responsive">
                     <table className="table table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Header</th>
-                                <th>Header</th>
-                                <th>Header</th>
-                                <th>Header</th>
+                                <th>Title ID</th>
+                                <th>Title Name</th>
+                                <th>Year of Release</th>
                             </tr>
                         </thead>
                         <tbody>
