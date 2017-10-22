@@ -1,6 +1,6 @@
 import React from 'react';
 import { TitlesList } from './titles-list';
-import { TitleDetail } from './title-detail';
+import { TitleDetail } from './title-detail/title-detail';
 import {
   BrowserRouter as Router,
   Route,
@@ -45,10 +45,18 @@ export class Dashboard extends React.Component {
           </header>
           <main role="main" className="container">
             <Route exact path="/" component={TitlesList} />
-            <Route path="/about" component={TitlesList} />
             <Route exact path="/titles" component={TitlesList} />
             <Route path="/titles/:search" component={TitlesList} />
             <Route path="/details/:titleId" component={TitleDetail} />
+            <Route exact path="/about" render={() => (
+              <div>
+                <br />
+                <h3>EA Turner => developer-challenge.</h3>
+                <br />
+                <br />
+                <h4>Challenge accepted by Douglas Almena.</h4>
+              </div>
+            )}/>
           </main>
         </div>
       </Router>

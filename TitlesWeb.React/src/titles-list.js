@@ -1,3 +1,4 @@
+import { Config } from './config';
 import React from 'react';
 import {
     Link
@@ -21,7 +22,7 @@ export class TitlesList extends React.Component {
     async loadData(search) {
         try {
 
-            let results = await fetch('http://localhost:63039/titles?search=' + escape(search))
+            let results = await fetch(Config.webapiUrl + 'titles?search=' + escape(search))
             let data = await results.json();
             let titles = data.map(title => {
                 return (
