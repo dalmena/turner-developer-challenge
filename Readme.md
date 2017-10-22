@@ -12,9 +12,10 @@
 - Run the following command:
 
 
+```
 $ cd TitlesWeb.React
 $ npm install
 $ npm start
-
+```
 
 - If necessary, configure the WebAPI endpoint in TitlesWeb.React/src/config.js
