@@ -28,7 +28,7 @@ namespace Titles.Webapi
             config.Formatters.Add(new JsonMediaTypeFormatter());
             var json = config.Formatters.JsonFormatter;
             json.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
-            json.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            json.SerializerSettings.NullValueHandling = NullValueHandling.Include;
             json.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
             json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
         }

@@ -1,56 +1,60 @@
 import React from 'react';
+import {
+    Link
+} from 'react-router-dom'
+
 
 export class TitlesList extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            titles: []
+            titles: [],
+            search: ""
         }
     }
 
-    // shouldComponentUpdate = (nextProps, nextState) => this.props.search === "" || this.props.search !== nextProps.search;
-
-    loadData(search) {
-        //console.log("search", this.props.search);
-        fetch('http://localhost:63039/titles?search=' + escape(search))
-            .then(results => {
-                return results.json();
-            })
-            .then(data => {
-                let titles = data.map(title => {
-                    return (
-                        <tr key={title.TitleId} className="clickable" onClick={ () => this.loadDetail(title.TitleId) }>
-                            <td>{title.TitleId}</td>
-                            <td>{title.TitleName}</td>
-                            <td>{title.ReleaseYear}</td>
-                        </tr>
-                    )
-                })
-                if (titles.length === 0) this.setNoDataFound();
-                else this.setState({ titles: titles });
-            },
-                (err) => {
-                    console.log("error: ", err)
-                    this.setNoDataFound()    
-                }   
-            );
+    componentWillReceiveProps(newProps) {
+        this.loadData(newProps.match.params.search || "");
     }
 
-    loadDetail(titleId) {
-        console.log("titleId", titleId)
+    async loadData(search) {
+        try {
+
+            let results = await fetch('http://localhost:63039/titles?search=' + escape(search))
+            let data = await results.json();
+            let titles = data.map(title => {
+                return (
+                    <tr key={title.TitleId} className="clickable">
+                        <td>{title.TitleId}</td>
+                        <td>
+                            <Link to={"/details/" + escape(title.TitleId)}>{title.TitleName}</Link>
+                        </td>
+                        <td>{title.ReleaseYear}</td>
+                    </tr>
+                )
+            })
+            if (titles.length === 0) this.setNoDataFound();
+            else this.setState({ titles: titles });
+        
+        } catch (error) {
+            console.log("error: ", error)
+            this.setNoDataFound()
+        }
     }
 
     componentDidMount() {
-        this.loadData("");
+        this.loadData(this.props.match.params.search || "");
     }
 
     setNoDataFound() {
-        this.setState({ titles: (
-            <tr>
-                <td colSpan="3">No data found.</td>
-            </tr>
-        )});
+        this.setState({
+            titles: (
+                <tr>
+                    <td colSpan="3">No data found.</td>
+                </tr>
+            )
+        });
     }
 
     render() {
